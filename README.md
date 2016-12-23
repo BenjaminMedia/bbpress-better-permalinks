@@ -1,0 +1,1 @@
+# bbpress-better-permalinks

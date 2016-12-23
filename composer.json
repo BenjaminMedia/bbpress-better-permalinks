@@ -1,0 +1,36 @@
+{
+  "name": "bonnier/bbpress-better-permalinks",
+  "description": "Better permalinks for topics in bbPress",
+  "type": "wordpress-plugin",
+  "keywords": ["wordpress", "plugin", "bbPress"],
+  "homepage": "https://github.com/BenjaminMedia/bbpress-better-permalinks",
+  "repositories":[
+    {
+      "type": "composer",
+      "url": "http://wpackagist.org"
+    }
+  ],
+  "authors": [
+    {
+      "name": "Bonnier Publications",
+      "email": "interactive@bonnier.dk",
+      "homepage": "http://bonnierpublications.com"
+    },
+    {
+      "name": "Alf Henderson",
+      "email": "alf.henderson@bonnier.dk"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/BenjaminMedia/bbpress-better-permalinks/issues",
+    "source": "https://github.com/BenjaminMedia/bbpress-better-permalinks"
+  },
+  "autoload": {
+    "psr-4": {
+      "Bonnier\\WP\\BBPress\\BetterPermalinks\\": "src/Bonnier/WP/BBPress/BetterPermalinks/"
+    }
+  },
+  "require": {
+    "php": ">=5.6"
+  }
+}
