@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name: Bonnier bbPress better permalinks
- * Version: 0.1.0
+ * Version: 0.1.1
  * Plugin URI: https://github.com/BenjaminMedia/bbpress-better-permalinks
  * Description: This plugin gives you the ability to select a post in bbPress as the best answer
- * Author: Bonnier - Michael Sørensen
+ * Author: Bonnier - Alf Henderson
  * License: MIT
  */
 
@@ -31,6 +31,7 @@ class Plugin
      * Text domain for translators
      */
     const TEXT_DOMAIN = 'bbpress-better-permalinks';
+    const FLUSH_REWRITE_RULES_FLAG = 'bbpress-better-permalinks-rewrite-flush-rules-flag';
 
     const CLASS_DIR = 'src';
 
@@ -111,4 +112,18 @@ function instance()
     return Plugin::instance();
 }
 
-add_action('plugins_loaded', __NAMESPACE__ . '\instance', 0);
+// Register a flag to flush the rewrite rules after the custom rules have been added
+register_activation_hook( __FILE__, function(){
+    update_option( Plugin::FLUSH_REWRITE_RULES_FLAG, true );
+});
+
+// Flush rewrite rules to generate new permalinks when plugin is deactivated
+register_deactivation_hook( __FILE__, 'flush_rewrite_rules');
+
+// If the plugin is currently being deactivated we do no want to register our
+if (isset($_GET['action'], $_GET['plugin']) && 'deactivate' === $_GET['action'] && plugin_basename(__FILE__) === $_GET['plugin'])
+    return;
+
+add_action('plugins_loaded', __NAMESPACE__ . '\instance');
+
+

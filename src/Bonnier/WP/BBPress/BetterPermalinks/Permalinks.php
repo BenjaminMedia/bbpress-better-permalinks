@@ -23,14 +23,12 @@ class Permalinks
      *
      * @author Nashwan Doaqan
      */
-    static function after_bbPress_setup()
+    public static function after_bbPress_setup()
     {
-
         if (function_exists('is_bbpress')) {
             add_action('registered_post_type', [__CLASS__, 'add_post_types_rewrite'], 1, 2);
             add_filter('post_type_link', [__CLASS__, 'filter_post_type_link'], 1, 2);
         }
-
     }
 
     /**
@@ -40,7 +38,7 @@ class Permalinks
      * @param $postType
      * @param $args
      */
-    static function add_post_types_rewrite($postType, $args)
+    public static function add_post_types_rewrite($postType, $args)
     {
         switch ($postType) {
             case bbp_get_topic_post_type():
@@ -50,6 +48,7 @@ class Permalinks
                     'top'
                 );
                 add_permastruct($postType, bbp_get_forum_slug()."%forumnames%".bbp_get_topic_slug()."/%postname%/", $args->rewrite);
+                static::flush_rewrite_rules_if_needed();
                 break;
         }
     }
@@ -64,11 +63,12 @@ class Permalinks
      *
      * @return mixed|string|void
      */
-    static function filter_post_type_link($post_link, $_post)
+    public static function filter_post_type_link($post_link, $_post)
     {
         global $wp_rewrite;
-        if (empty($_post) || $_post->post_status === 'auto-draft' || strpos('post_type', $post_link))
+        if (empty($_post) || $_post->post_status === 'auto-draft' || strpos('post_type', $post_link)) {
             return $post_link;
+        }
         switch ($_post->post_type) {
             case bbp_get_topic_post_type():
                 $post_link = $wp_rewrite->get_extra_permastruct($_post->post_type);
@@ -78,20 +78,20 @@ class Permalinks
                 break;
         }
         return $post_link;
-
     }
 
-    static function get_topic_parent_forums_slug($topicId) {
+    public static function get_topic_parent_forums_slug($topicId)
+    {
         $forumId = bbp_get_topic_forum_id($topicId);
         $forumSlugs = [];
-        if($forumId === 0) { // means the topic belongs to no forum
+        if ($forumId === 0) { // means the topic belongs to no forum
             return '/no-forum/';
         }
         $forum = get_post($forumId);
         $hasParent = true;
         while ($hasParent) {
             $forumSlugs[] = $forum->post_name;
-            if($forum->post_parent === 0) {
+            if ($forum->post_parent === 0) {
                 $hasParent = false;
             } else {
                 $forum = get_post($forum->post_parent);
@@ -100,8 +100,15 @@ class Permalinks
         return '/' . implode('/', array_reverse($forumSlugs)) . '/';
     }
 
-    static function get_topic_name_slug($post) {
+    public static function get_topic_name_slug($post)
+    {
         return empty($post->post_name) ? sanitize_title_with_dashes($post->post_title) : $post->post_name;
     }
 
+    private static function flush_rewrite_rules_if_needed() {
+        if ( get_option( Plugin::FLUSH_REWRITE_RULES_FLAG ) ) {
+            flush_rewrite_rules();
+            delete_option( Plugin::FLUSH_REWRITE_RULES_FLAG );
+        }
+    }
 }
