@@ -3,7 +3,7 @@
  * Plugin Name: Bonnier bbPress better permalinks
  * Version: 0.1.1
  * Plugin URI: https://github.com/BenjaminMedia/bbpress-better-permalinks
- * Description: This plugin gives you the ability to select a post in bbPress as the best answer
+ * Description: This plugin alters the url structure for topics in bbpress so they belong to the forum they are attached to
  * Author: Bonnier - Alf Henderson
  * License: MIT
  */
