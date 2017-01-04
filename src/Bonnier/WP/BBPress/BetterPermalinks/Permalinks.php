@@ -47,7 +47,7 @@ class Permalinks
                     'index.php?forumnames=$matches[1]&name=$matches[2]&post_type='.$postType,
                     'top'
                 );
-                add_permastruct($postType, bbp_get_forum_slug()."%forumnames%".bbp_get_topic_slug()."/%postname%/", $args->rewrite);
+                add_permastruct($postType, bbp_get_forum_slug()."%forumnames%".get_option( '_bbp_topic_slug', 'topic' )."/%postname%/", $args->rewrite);
                 static::flush_rewrite_rules_if_needed();
                 break;
         }
