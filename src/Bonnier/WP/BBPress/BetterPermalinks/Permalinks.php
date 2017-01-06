@@ -42,11 +42,19 @@ class Permalinks
     {
         switch ($postType) {
             case bbp_get_topic_post_type():
+
                 add_rewrite_rule(
-                    '^'.bbp_get_forum_slug().'(.+?)'.bbp_get_topic_slug().'/(.+?)/?$',
+                    bbp_get_forum_slug().'(.+?)'.bbp_get_topic_slug().'/(.+?)/'.bbp_get_paged_slug().'/([0-9]{1,})/?$',
+                    'index.php?forumnames=$matches[1]&name=$matches[2]&post_type='.$postType.'&paged=$matches[3]',
+                    'top'
+                );
+
+                add_rewrite_rule(
+                    bbp_get_forum_slug().'(.+?)'.bbp_get_topic_slug().'/(.+?)/?$',
                     'index.php?forumnames=$matches[1]&name=$matches[2]&post_type='.$postType,
                     'top'
                 );
+
                 add_permastruct($postType, bbp_get_forum_slug()."%forumnames%".get_option( '_bbp_topic_slug', 'topic' )."/%postname%/", $args->rewrite);
                 static::flush_rewrite_rules_if_needed();
                 break;
