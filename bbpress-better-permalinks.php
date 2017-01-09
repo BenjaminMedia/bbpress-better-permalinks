@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Bonnier bbPress better permalinks
- * Version: 0.1.4
+ * Version: 0.1.5
  * Plugin URI: https://github.com/BenjaminMedia/bbpress-better-permalinks
  * Description: This plugin alters the url structure for topics in bbpress so they belong to the forum they are attached to
  * Author: Bonnier - Alf Henderson
