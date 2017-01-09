@@ -43,12 +43,19 @@ class Permalinks
         switch ($postType) {
             case bbp_get_topic_post_type():
 
+                // Paged topic Rule
                 add_rewrite_rule(
                     bbp_get_forum_slug().'(.+?)'.bbp_get_topic_slug().'/(.+?)/'.bbp_get_paged_slug().'/([0-9]{1,})/?$',
                     'index.php?forumnames=$matches[1]&name=$matches[2]&post_type='.$postType.'&paged=$matches[3]',
                     'top'
                 );
-
+                // Edit topic rule
+                add_rewrite_rule(
+                    bbp_get_forum_slug().'(.+?)'.bbp_get_topic_slug().'/(.+?)/edit/?$',
+                    'index.php?forumnames=$matches[1]&name=$matches[2]&post_type='.$postType.'&'.bbp_get_edit_rewrite_id().'=1',
+                    'top'
+                );
+                // View topic rule
                 add_rewrite_rule(
                     bbp_get_forum_slug().'(.+?)'.bbp_get_topic_slug().'/(.+?)/?$',
                     'index.php?forumnames=$matches[1]&name=$matches[2]&post_type='.$postType,
