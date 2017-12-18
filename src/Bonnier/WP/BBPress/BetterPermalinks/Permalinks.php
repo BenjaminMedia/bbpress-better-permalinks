@@ -34,35 +34,38 @@ class Permalinks
     /**
      * Add the forum parents slug structure to bbPress topics
      *
+     * Bugfix by @geefo with admin help from @JHGrove3
      *
      * @param $postType
      * @param $args
      */
     public static function add_post_types_rewrite($postType, $args)
     {
+        $topic_slug = get_option( '_bbp_topic_slug', 'topic' );
+            
         switch ($postType) {
             case bbp_get_topic_post_type():
 
                 // Paged topic Rule
                 add_rewrite_rule(
-                    bbp_get_forum_slug().'(.+?)'.bbp_get_topic_slug().'/(.+?)/'.bbp_get_paged_slug().'/([0-9]{1,})/?$',
+                    bbp_get_forum_slug().'(.+?)'.$topic_slug.'/(.+?)/'.bbp_get_paged_slug().'/([0-9]{1,})/?$',
                     'index.php?forumnames=$matches[1]&name=$matches[2]&post_type='.$postType.'&paged=$matches[3]',
                     'top'
                 );
                 // Edit topic rule
                 add_rewrite_rule(
-                    bbp_get_forum_slug().'(.+?)'.bbp_get_topic_slug().'/(.+?)/edit/?$',
+                    bbp_get_forum_slug().'(.+?)'.$topic_slug.'/(.+?)/edit/?$',
                     'index.php?forumnames=$matches[1]&name=$matches[2]&post_type='.$postType.'&'.bbp_get_edit_rewrite_id().'=1',
                     'top'
                 );
                 // View topic rule
                 add_rewrite_rule(
-                    bbp_get_forum_slug().'(.+?)'.bbp_get_topic_slug().'/(.+?)/?$',
+                    bbp_get_forum_slug().'(.+?)'.$topic_slug.'/(.+?)/?$',
                     'index.php?forumnames=$matches[1]&name=$matches[2]&post_type='.$postType,
                     'top'
                 );
 
-                add_permastruct($postType, bbp_get_forum_slug()."%forumnames%".get_option( '_bbp_topic_slug', 'topic' )."/%postname%/", $args->rewrite);
+                add_permastruct($postType, bbp_get_forum_slug()."%forumnames%".$topic_slug."/%postname%/", $args->rewrite);
                 static::flush_rewrite_rules_if_needed();
                 break;
         }
